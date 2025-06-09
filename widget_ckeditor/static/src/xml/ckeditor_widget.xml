@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="widget_ckeditor.CkeditorWidget" owl="1">
+        <textarea t-att-id="editorId" t-att-placeholder="props.placeholder" t-att-value="props.value"/>
+    </t>
+</templates>

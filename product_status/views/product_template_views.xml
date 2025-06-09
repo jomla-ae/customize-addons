@@ -1,0 +1,84 @@
+<odoo>
+    <record id="view_product_status_product_template_only_filter" model="ir.ui.view">
+        <field name="name">view.product.status.product.template.only.filter</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='categ_id']" position="after">
+                <separator/>
+                <filter name="group_by_state" string="Status" domain="[]" context="{'group_by':'state'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_status_product_template_only_tree" model="ir.ui.view">
+        <field name="name">view.product.status.product.template.only.tree</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='activity_exception_decoration']" position="after">
+                <field name="state" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_status_product_template_only_form" model="ir.ui.view">
+        <field name="name">view.product.status.product.template.only.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_submit" string="Submit" type="object" states="draft" class="oe_highlight"
+                        groups="stock.group_stock_manager"/>
+                <button name="action_approve" string="Approve" type="object" states="to_reviewed"
+                        class="oe_highlight" groups="stock.group_stock_manager"/>
+                <button name="action_publish" string="Publish" type="object" states="approved" class="oe_highlight"
+                        groups="stock.group_stock_manager"/>
+                <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                        states="to_reviewed,approved,published" class="oe_highlight"
+                        groups="stock.group_stock_manager"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,to_reviewed,approved,published"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_submit_product_template_server" model="ir.actions.server">
+        <field name="name">Submit</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_submit()</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+    </record>
+
+    <record id="action_approve_product_template_server" model="ir.actions.server">
+        <field name="name">Approve</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_approve()</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+    </record>
+
+    <record id="action_publish_product_template_server" model="ir.actions.server">
+        <field name="name">Publish</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_publish()</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+    </record>
+
+    <record id="action_reset_to_draft_product_template_server" model="ir.actions.server">
+        <field name="name">Reset to Draft</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_reset_to_draft()</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+    </record>
+</odoo>

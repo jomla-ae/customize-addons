@@ -1,0 +1,29 @@
+<odoo>
+    <record id="view_product_multi_image_product_variant_easy_edit_form" model="ir.ui.view">
+        <field name="name">view.product.multi.image.product.variant.easy.edit.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='packaging']" position="after">
+                <group name="product_variant_images" string="Extra Variant Media">
+                    <field name="product_variant_image_ids" class="o_product_image_list"
+                           context="{'default_name': name}" mode="kanban" add-label="Add a Media" nolabel="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_multi_image_product_variant_normal_form" model="ir.ui.view">
+        <field name="name">view.product.multi.image.product.variant.normal.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales']/group[@name='sale']" position="inside">
+                <group name="product_variant_images" string="Extra Variant Media">
+                    <field name="product_variant_image_ids" class="o_product_image_list"
+                           context="{'default_name': name}" mode="kanban" add-label="Add a Media" nolabel="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

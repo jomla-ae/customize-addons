@@ -1,0 +1,20 @@
+.ck.ck-word-count {
+    display: flex;
+    justify-content: flex-end;
+    background: var(--ck-color-toolbar-background);
+    padding: var(--ck-spacing-small) var(--ck-spacing-standard);
+    border: 1px solid var(--ck-color-toolbar-border);
+    border-top-width: 0;
+    border-radius: 0 0 var(--ck-border-radius);
+    font: normal normal normal var(--ck-font-size-base) / var(--ck-line-height-base) var(--ck-font-face);
+}
+
+.ck.ck-word-count .ck-word-count__words {
+    margin-right: var(--ck-spacing-standard);
+}
+
+.ck.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
+.ck.ck-rounded-corners .ck-source-editing-area textarea {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
