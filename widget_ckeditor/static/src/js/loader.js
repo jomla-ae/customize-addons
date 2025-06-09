@@ -1,7 +1,7 @@
 /** @odoo-module */
 
 import { templates } from "@web/core/assets";
-import { _t } from "@web/core/l10n/translation";
+import { _t } from "web.core";
 import { registry } from "@web/core/registry";
 
 const { Component, mount } = owl;
@@ -18,6 +18,11 @@ export async function load(record) {
         textInput.style.display = "none";
         div.appendChild(textInput);
 
+        let readOnly = false;
+        const readOnlyAttr = textInput.getAttribute("readonly");
+        if (readOnlyAttr !== null && readOnlyAttr.toLowerCase() === "true") {
+            readOnly = true;
+        }
         mount(CkeditorWidget, div, {
             env: Component.env,
             templates,
@@ -31,7 +36,11 @@ export async function load(record) {
                     textInput.value = value;
                     textInput.dispatchEvent(new Event("input"));
                 },
-                record: record,
+                record: {
+                    resModel: record.resModel,
+                    resId: record.resId,
+                    readOnly: readOnly,
+                },
             },
         });
     }

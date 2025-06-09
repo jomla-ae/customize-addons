@@ -61,15 +61,10 @@ export class CkeditorWidget extends Component {
         });
 
         onWillUpdateProps((nextProps) => {
-            // Only update the editor if it exists and the value actually changed
+            // Only update the editor if it exists and the record changed
             try {
-                if (
-                    this.editorInstance &&
-                    this.getStringValue(nextProps.value) !== this.getStringValue(this.props.value)
-                ) {
-                    this.isSettingData = true;
+                if (this.editorInstance && nextProps.record.id !== this.props.record.id) {
                     this.editorInstance.setData(this.getStringValue(nextProps.value));
-                    this.isSettingData = false;
                 }
             } catch (error) {
                 console.error("Error updating CKEditor data:", error);
@@ -369,17 +364,16 @@ export class CkeditorWidget extends Component {
 
                 // Set initial data
                 if (this.props.value) {
-                    this.isSettingData = true;
                     editor.setData(this.getStringValue(this.props.value));
-                    this.isSettingData = false;
                 }
 
-                // Handle focus change - only update on blur
+                editor.model.document.on("change:data", () => {
+                    this.updateValue(editor.getData());
+                });
+
                 editor.ui.focusTracker.on("change:isFocused", (evt, name, isFocused) => {
-                    if (!isFocused && !this.isSettingData) {
-                        // Editor lost focus
-                        const newValue = editor.getData();
-                        this.updateValue(newValue);
+                    if (!isFocused) {
+                        this.updateValue(editor.getData());
                     }
                 });
 
@@ -437,6 +431,11 @@ export class CkeditorWidget extends Component {
                         { priority: "highest" }
                     );
                 });
+
+                if (this.props.record.readOnly) {
+                    // Disable the editor if the record is read-only
+                    editor.enableReadOnlyMode("readOnlyMode");
+                }
             })
             .catch((error) => {
                 console.error("There was a problem creating the CKEditor instance", error);
@@ -489,7 +488,7 @@ export class CkeditorWidget extends Component {
             resId: this.props.record.resId,
             onAttachmentChange: this._onAttachmentChange.bind(this),
             save: this._onMediaDialogSave.bind(this),
-            close: () => {},
+            close: () => { },
         });
     }
 
@@ -541,5 +540,5 @@ CkeditorWidget.extractProps = ({ attrs, field }) => {
         lang: attrs.lang || "en",
     };
 };
-CkeditorWidget.supportedTypes = ["text","html"];
+CkeditorWidget.supportedTypes = ["text", "html"];
 registry.category("fields").add("ckeditor", CkeditorWidget);
